@@ -163,7 +163,20 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Scraper.DataAccess\Scraper.DataAccess.csproj">
+      <Project>{f44d7dbb-9c2d-422a-a0a8-ab24b8c28c70}</Project>
+      <Name>Scraper.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scraper.Models\Scraper.Models.csproj">
+      <Project>{41a741f5-ad80-400f-9d04-847fc8718ed0}</Project>
+      <Name>Scraper.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Scraper.Services\Scraper.Services.csproj">
+      <Project>{48c8bb21-ff14-4317-9acb-9e95cdab0868}</Project>
+      <Name>Scraper.Services</Name>
+    </ProjectReference>
+  </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
