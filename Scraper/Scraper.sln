@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84722DC2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper.LoadTester", "Scraper.Tester\Scraper.LoadTester.csproj", "{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper.Tests", "Scraper.Tests\Scraper.Tests.csproj", "{0044B259-6032-41FA-9A2C-61F7E8300FCD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,17 @@ Global
 		{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0044B259-6032-41FA-9A2C-61F7E8300FCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0044B259-6032-41FA-9A2C-61F7E8300FCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0044B259-6032-41FA-9A2C-61F7E8300FCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0044B259-6032-41FA-9A2C-61F7E8300FCD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369} = {84722DC2-CE44-4071-96AD-E08096AA4C4D}
+		{0044B259-6032-41FA-9A2C-61F7E8300FCD} = {84722DC2-CE44-4071-96AD-E08096AA4C4D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {750D0923-7613-43D3-A0C0-2D3E8BE67F1F}
