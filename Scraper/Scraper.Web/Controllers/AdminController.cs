@@ -15,7 +15,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("status")]
         public IHttpActionResult Status()
         {
-            return Ok(ScraperManager.Status.ToString());
+            return Ok(JobManager.Status.ToString());
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Scraper.Web.Controllers
         [HttpPost, Route("start")]
         public void Start()
         {
-            ScraperManager.Start();
+            JobManager.Start();
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace Scraper.Web.Controllers
         [HttpPost, Route("stop")]
         public void Stop()
         {
-            ScraperManager.Stop();
+            JobManager.Stop();
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Scraper.Web.Controllers
         [HttpPost, Route("pause")]
         public void Pause()
         {
-            ScraperManager.Pause();
+            JobManager.Pause();
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Scraper.Web.Controllers
         [HttpPost, Route("resume")]
         public void Resume()
         {
-            ScraperManager.Resume();
+            JobManager.Resume();
         }
 
         /// <summary>
@@ -66,7 +66,7 @@ namespace Scraper.Web.Controllers
             if (maxConcurrency < 1 || maxConcurrency > max)
                 return BadRequest($"maxConcurrency needs to be a positive number less than {max}.");
 
-            ScraperManager.MaxScrapers = maxConcurrency;
+            JobManager.MaxScrapers = maxConcurrency;
 
             return Ok();
         }
@@ -78,7 +78,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("concurrency")]
         public IHttpActionResult GetConcurrency()
         {
-            return Ok(ScraperManager.MaxScrapers);
+            return Ok(JobManager.MaxScrapers);
         }
     }
 }

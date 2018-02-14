@@ -19,7 +19,7 @@ namespace Scraper.Web.Controllers
         public IHttpActionResult Scrape(ScrapeRequest request)
         {
             var job = new Job(request.Url);
-            ScraperManager.QueueJob(job);
+            JobManager.QueueJob(job);
 
             return Ok(job);
         }
@@ -27,7 +27,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("job/{id}")]
         public IHttpActionResult GetJob(Guid id)
         {
-            var job = ScraperManager.GetJob(id);
+            var job = JobManager.GetJob(id);
 
             return job == null
                 ? (IHttpActionResult)NotFound()
@@ -40,7 +40,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("pending")]
         public IHttpActionResult GetPendingJobs()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Pending));
+            return Ok(JobManager.GetJobs(JobStatus.Pending));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("running")]
         public IHttpActionResult GetRunningJobs()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Running));
+            return Ok(JobManager.GetJobs(JobStatus.Running));
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("completed")]
         public IHttpActionResult GetCompleted()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Completed));
+            return Ok(JobManager.GetJobs(JobStatus.Completed));
         }
 
         /// <summary>
@@ -67,7 +67,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("failed")]
         public IHttpActionResult GetFailedJobs()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Failed));
+            return Ok(JobManager.GetJobs(JobStatus.Failed));
         }
     }
 }
