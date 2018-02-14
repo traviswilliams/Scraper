@@ -9,5 +9,7 @@ namespace Scraper.Models
         string Url { get; set; }
 
         JobStatus Status { get; set; }
+
+        string Result { get; set; }
     }
 }

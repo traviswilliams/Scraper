@@ -1,10 +1,23 @@
-﻿using System.Collections.Generic;
+﻿using Scraper.Models;
+using System.Collections.Generic;
 
-namespace Scraper.Models
+namespace Scraper.Services
 {
-    interface IJobManager
+    public interface IJobManager
     {
-        int CurrentlyRunningJobs();
+        int MaxScrapers { get; set; }
+
+        int CurrentlyRunningJobs { get; }
+
+        void Start();
+
+        void Stop();
+
+        void Pause();
+
+        void Resume();
+
+        void QueueJob(IJob job);
 
         /// <summary>
         /// Get all jobs.

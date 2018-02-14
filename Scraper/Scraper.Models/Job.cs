@@ -8,7 +8,9 @@ namespace Scraper.Models
 
         public string Url { get; set; }
 
-        public JobStatus Status { get; set; }
+        public string Result { get; set; }
+
+        public JobStatus Status { get; set; } = JobStatus.Pending;
 
         public Job() : this(Guid.NewGuid()) { }
 
