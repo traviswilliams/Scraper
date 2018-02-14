@@ -48,7 +48,7 @@ namespace Scraper.Web
             // container.RegisterType<IProductRepository, ProductRepository>();
 
             //Singletons
-            container.RegisterType<IRepository<IJob>, InMemoryRepository>(new ContainerControlledLifetimeManager());
+            container.RegisterType<IRepository<Job>, InMemoryRepository>(new ContainerControlledLifetimeManager());
             container.RegisterType<IJobManager, JobManager>(new ContainerControlledLifetimeManager());
 
             //New instance per

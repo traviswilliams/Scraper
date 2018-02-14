@@ -28,7 +28,7 @@ namespace Scraper.Tester
                 "https://www.msn.com"
             };
 
-            var jobs = new List<IJob>();
+            var jobs = new List<Job>();
 
             using(var client = new HttpClient())
             {

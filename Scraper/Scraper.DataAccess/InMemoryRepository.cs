@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace Scraper.DataAccess
 {
-    public class InMemoryRepository : IRepository<IJob>
+    public class InMemoryRepository : IRepository<Job>
     {
-        public void Save(IJob item)
+        public void Save(Job item)
         {
             if (item.Id == Guid.Empty)
                 item.Id = Guid.NewGuid();
@@ -16,7 +16,7 @@ namespace Scraper.DataAccess
             DataStore.Instance.Store.AddOrUpdate(item.Id, item, (key, old) => item);
         }
 
-        public void Delete(IJob item)
+        public void Delete(Job item)
         {
             Delete(item.Id);
         }
@@ -26,13 +26,13 @@ namespace Scraper.DataAccess
             DataStore.Instance.Store.TryRemove(id, out var oldJob);
         }
 
-        public IJob Get(Guid id)
+        public Job Get(Guid id)
         {
             DataStore.Instance.Store.TryGetValue(id, out var job);
             return job;
         }
 
-        public IEnumerable<IJob> GetByStatus(JobStatus status)
+        public IEnumerable<Job> GetByStatus(JobStatus status)
         {
             return DataStore.Instance.Store
                 .Where(i => i.Value.Status == status)
@@ -40,7 +40,7 @@ namespace Scraper.DataAccess
                 .ToList();
         }
 
-        public IEnumerable<IJob> Where(Predicate<IJob> query)
+        public IEnumerable<Job> Where(Predicate<Job> query)
         {
             return DataStore.Instance.Store
                 .Where(i => query(i.Value))
@@ -75,12 +75,12 @@ namespace Scraper.DataAccess
                 }
             }
 
-            internal ConcurrentDictionary<Guid, IJob> Store { get; private set; }
+            internal ConcurrentDictionary<Guid, Job> Store { get; private set; }
 
             private DataStore()
             {
                 /* Disallow creation of this class outside of the class itself. */
-                Store = new ConcurrentDictionary<Guid, IJob>();
+                Store = new ConcurrentDictionary<Guid, Job>();
             }
         }
     }

@@ -2,7 +2,7 @@
 
 namespace Scraper.Models
 {
-    public class Job : IJob
+    public class Job
     {
         public Guid Id { get; set; }
 

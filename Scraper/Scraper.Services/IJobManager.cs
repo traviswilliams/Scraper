@@ -21,21 +21,21 @@ namespace Scraper.Services
 
         void Resume();
 
-        void QueueJob(IJob job);
+        void QueueJob(Job job);
 
         /// <summary>
         /// Get a job.
         /// </summary>
-        IJob GetJob(Guid id);
+        Job GetJob(Guid id);
 
         /// <summary>
         /// Get all jobs with a particular status.
         /// </summary>
-        IEnumerable<IJob> GetJobs(JobStatus status);
+        IEnumerable<Job> GetJobs(JobStatus status);
 
         /// <summary>
         /// Get jobs matching a predicate.
         /// </summary>
-        IEnumerable<IJob> GetJobs(Predicate<IJob> query);
+        IEnumerable<Job> GetJobs(Predicate<Job> query);
     }
 }

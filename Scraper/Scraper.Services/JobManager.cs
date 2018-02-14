@@ -14,7 +14,7 @@ namespace Scraper.Services
     public class JobManager : IJobManager
     {
         private IScraperService Scraper { get; }
-        private IRepository<IJob> JobRepository { get; }
+        private IRepository<Job> JobRepository { get; }
 
         private int maxScrapers = 2;
 
@@ -34,14 +34,14 @@ namespace Scraper.Services
 
         public int CurrentlyRunningJobs => throw new NotImplementedException();
 
-        private ConcurrentQueue<IJob> PendingJobQueue { get; } = new ConcurrentQueue<IJob>();
-        private ConcurrentDictionary<IJob, Task<ScrapeResult>> RunningJobs { get; } = new ConcurrentDictionary<IJob, Task<ScrapeResult>>();
+        private ConcurrentQueue<Job> PendingJobQueue { get; } = new ConcurrentQueue<Job>();
+        private ConcurrentDictionary<Job, Task<ScrapeResult>> RunningJobs { get; } = new ConcurrentDictionary<Job, Task<ScrapeResult>>();
 
         private Thread jobRunner;
         private static object lockObject = new object();
         private static EventWaitHandle waitHandle = new ManualResetEvent(true);
 
-        public JobManager(IScraperService scraper, IRepository<IJob> repository)
+        public JobManager(IScraperService scraper, IRepository<Job> repository)
         {
             Scraper = scraper;
             JobRepository = repository;
@@ -103,23 +103,23 @@ namespace Scraper.Services
             waitHandle.Set();
         }
 
-        public void QueueJob(IJob job)
+        public void QueueJob(Job job)
         {
             JobRepository.Save(job);
             PendingJobQueue.Enqueue(job);
         }
 
-        public IJob GetJob(Guid id)
+        public Job GetJob(Guid id)
         {
             return JobRepository.Get(id);
         }
 
-        public IEnumerable<IJob> GetJobs(JobStatus status)
+        public IEnumerable<Job> GetJobs(JobStatus status)
         {
             return JobRepository.GetByStatus(status);
         }
 
-        public IEnumerable<IJob> GetJobs(Predicate<IJob> query)
+        public IEnumerable<Job> GetJobs(Predicate<Job> query)
         {
             return JobRepository.Where(query);
         }
@@ -129,7 +129,7 @@ namespace Scraper.Services
         /// </summary>
         private void ProcessWaitingJobs()
         {
-            IJob pendingJob = null;
+            Job pendingJob = null;
 
             if (CanProcessJob())
             {
@@ -162,7 +162,7 @@ namespace Scraper.Services
         /// Remove jobs when they succeed/fail
         /// </summary>
         /// <param name="job"></param>
-        private void ProcessRunningJob(IJob job)
+        private void ProcessRunningJob(Job job)
         {
             if (!RunningJobs.TryGetValue(job, out var scrapeResult))
                 return;
