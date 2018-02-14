@@ -10,6 +10,9 @@ namespace Scraper.DataAccess
     {
         public void Save(IJob item)
         {
+            if (item.Id == Guid.Empty)
+                item.Id = Guid.NewGuid();
+
             DataStore.Instance.Store.AddOrUpdate(item.Id, item, (key, old) => item);
         }
 
@@ -31,15 +34,18 @@ namespace Scraper.DataAccess
 
         public IEnumerable<IJob> GetByStatus(JobStatus status)
         {
-            var jobs = new List<IJob>();
+            return DataStore.Instance.Store
+                .Where(i => i.Value.Status == status)
+                .Select(i => i.Value)
+                .ToList();
+        }
 
-            foreach(var item in DataStore.Instance.Store)
-            {
-                if (item.Value.Status == status)
-                    jobs.Add(item.Value);
-            }
-
-            return jobs.ToList();
+        public IEnumerable<IJob> Where(Predicate<IJob> query)
+        {
+            return DataStore.Instance.Store
+                .Where(i => query(i.Value))
+                .Select(i => i.Value)
+                .ToList();
         }
 
         /// <summary>

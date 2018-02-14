@@ -119,6 +119,11 @@ namespace Scraper.Services
             return JobRepository.GetByStatus(status);
         }
 
+        public IEnumerable<IJob> GetJobs(Predicate<IJob> query)
+        {
+            return JobRepository.Where(query);
+        }
+
         /// <summary>
         /// Start any pending jobs as soon as we have capacity.
         /// </summary>

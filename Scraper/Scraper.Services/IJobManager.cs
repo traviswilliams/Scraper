@@ -26,14 +26,16 @@ namespace Scraper.Services
         /// <summary>
         /// Get a job.
         /// </summary>
-        /// <returns></returns>
         IJob GetJob(Guid id);
 
         /// <summary>
         /// Get all jobs with a particular status.
         /// </summary>
-        /// <param name="status"></param>
-        /// <returns></returns>
         IEnumerable<IJob> GetJobs(JobStatus status);
+
+        /// <summary>
+        /// Get jobs matching a predicate.
+        /// </summary>
+        IEnumerable<IJob> GetJobs(Predicate<IJob> query);
     }
 }

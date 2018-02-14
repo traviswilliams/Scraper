@@ -2,6 +2,7 @@
 using Scraper.Services;
 using Scraper.Web.Models;
 using System;
+using System.Linq;
 using System.Web.Http;
 
 namespace Scraper.Web.Controllers
@@ -18,7 +19,12 @@ namespace Scraper.Web.Controllers
         [HttpPost, Route("scrape")]
         public IHttpActionResult Scrape(ScrapeRequest request)
         {
-            var job = new Job(request.Url);
+            //If we've already scraped the same url, re-use the same job.
+            var existingJob = JobManager
+                .GetJobs((i) => i.Url.ToLowerInvariant() == request.Url.ToLowerInvariant())
+                .FirstOrDefault();
+
+            var job = existingJob ?? new Job(request.Url);
             JobManager.QueueJob(job);
 
             return Ok(job);

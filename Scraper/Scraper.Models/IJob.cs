@@ -4,7 +4,7 @@ namespace Scraper.Models
 {
     public interface IJob
     {
-        Guid Id { get; }
+        Guid Id { get; set; }
 
         string Url { get; set; }
 

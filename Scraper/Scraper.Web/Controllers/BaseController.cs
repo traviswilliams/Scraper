@@ -12,4 +12,4 @@ namespace Scraper.Web.Controllers
             JobManager = scraperManager;
         }
     }
-}
+} 

@@ -4,7 +4,7 @@ namespace Scraper.Models
 {
     public class Job : IJob
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         public string Url { get; set; }
 
@@ -12,11 +12,17 @@ namespace Scraper.Models
 
         public JobStatus Status { get; set; } = JobStatus.Pending;
 
-        public Job() : this(Guid.NewGuid()) { }
+        public Job() { }
 
-        public Job(Guid id) : this(id, string.Empty) { }
+        public Job(Guid id) 
+        {
+            Id = id;
+        }
 
-        public Job(string url) : this(Guid.NewGuid(),  url) { }
+        public Job(string url)
+        {
+            Url = url;
+        }
 
         public Job(Guid id, string url)
         {
