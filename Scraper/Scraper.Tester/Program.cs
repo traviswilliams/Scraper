@@ -3,55 +3,69 @@ using Scraper.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace Scraper.Tester
 {
+    /// <summary>
+    /// This applications purpose is to load test the API for 1 minute.
+    /// </summary>
     class Program
     {
         static void Main(string[] args)
         {
             const string localIISUrl = "http://localhost:65304";
 
-            var scrapeUrl = $"/scraper/scrape";
+            var scrapeUrl = "/scraper/scrape";
 
             var pageScrapeList = new[]
             {
-                "https://www.wellsfargo.com",
-                "https://www.chase.com",
-                "https://www.google.com",
-                "https://www.yahoo.com",
-                "https://www.schwab.com",
-                "https://www.etrade.com",
-                "https://www.tdameritrade.com",
-                "https://www.stackoverflow.com",
-                "https://www.yahoo.com",
-                "https://www.msn.com"
+                "http://localhost:65304/Api/POST-scraper-scrape",
+                "http://localhost:65304/Api/GET-scraper-job-id",
+                "http://localhost:65304/Api/GET-scraper-pending",
+                "http://localhost:65304/Api/GET-scraper-running",
+                "http://localhost:65304/Api/GET-scraper-completed",
+                "http://localhost:65304/Api/GET-scraper-failed",
+                "http://localhost:65304/Api/GET-admin-status",
+                "http://localhost:65304/Api/POST-admin-start",
+                "http://localhost:65304/Api/POST-admin-stop",
+                "http://localhost:65304/Api/POST-admin-pause",
+                "http://localhost:65304/Api/POST-admin-resume",
+                "http://localhost:65304/Api/POST-admin-concurrency-maxConcurrency",
+                "http://localhost:65304/Api/GET-admin-concurrency",
+                "malformed_url",
+                "http://someplacethatshouldnotexist.anotherunlikelyspot.io"
             };
 
-            var jobs = new List<Job>();
+            var endTime = DateTime.UtcNow.AddMinutes(1);
 
-            using(var client = new HttpClient())
+            var jobs = new List<Job>();
+            using (var client = new HttpClient())
             {
                 client.BaseAddress = new Uri(localIISUrl);
 
-                foreach(var url in pageScrapeList)
+                while (endTime >= DateTime.Now)
                 {
-                    var content = new FormUrlEncodedContent(new[]
+
+                    Parallel.ForEach(pageScrapeList, (url) =>
                     {
+                        var content = new FormUrlEncodedContent(new[]
+                        {
                         new KeyValuePair<string, string>("url", url)
+                        });
+                        var response = client.PostAsync(scrapeUrl, content).GetAwaiter().GetResult();
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            var job = JsonConvert.DeserializeObject<Job>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+                            Console.WriteLine($"Job: {job.Id} -- Status: {job.Status} -- Url: {job.Url}");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Error loading: {url} -- http code: {response.StatusCode}\r\n{response.ReasonPhrase}");
+                        }
                     });
-                    var response = client.PostAsync(scrapeUrl, content).GetAwaiter().GetResult();
-
-                    if (response.IsSuccessStatusCode)
-                        jobs.Add(JsonConvert.DeserializeObject<Job>(response.Content.ReadAsStringAsync().GetAwaiter().GetResult()));
-                    else
-                        Console.WriteLine($"Error loading: {url} -- http code: {response.StatusCode}\r\n{response.ReasonPhrase}");
                 }
-            }
-
-            foreach(var job in jobs)
-            {
-                Console.WriteLine($"Job: {job.Id} -- Status: {job.Status} -- Url: {job.Url}");
             }
 
             Console.WriteLine();

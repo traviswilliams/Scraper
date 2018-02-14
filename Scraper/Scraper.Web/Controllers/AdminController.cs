@@ -1,18 +1,29 @@
 ﻿using System.Web.Http;
 using Scraper.Services;
+using Scraper.DataAccess;
+using Scraper.Models;
+using System.Web.Http.Description;
+using Scraper.Services.Models;
 
 namespace Scraper.Web.Controllers
 {
+    /// <summary>
+    /// Expose administrative functionality for job management.
+    /// </summary>
     [RoutePrefix("admin")]
     public class AdminController : BaseController
     {
-        public AdminController(IJobManager scraperManager) : base(scraperManager) { }
+        /// <summary>
+        /// Create a new instance of the AdminController.
+        /// </summary>
+        public AdminController(IJobManager jobManager, IRepository<Job> jobRepository) : base(jobManager, jobRepository) { }
 
         /// <summary>
         /// Get the current status of the scraper.
         /// </summary>
         /// <returns></returns>
         [HttpGet, Route("status")]
+        [ResponseType(typeof(ManagerStatus))]
         public IHttpActionResult Status()
         {
             return Ok(JobManager.Status.ToString());
@@ -59,6 +70,7 @@ namespace Scraper.Web.Controllers
         /// </summary>
         /// <param name="maxConcurrency">Maximum number of scrapers allowed to run concurrently</param>
         [HttpPost, Route("concurrency/{maxConcurrency}")]
+        [ResponseType(typeof(int))]
         public IHttpActionResult UpdateConcurrency(int maxConcurrency)
         {
             const int max = 100;
@@ -72,10 +84,10 @@ namespace Scraper.Web.Controllers
         }
 
         /// <summary>
-        /// Update the concurrency
+        /// Get the concurrency
         /// </summary>
-        /// <param name="maxConcurrency">Maximum number of scrapers allowed to run concurrently</param>
         [HttpGet, Route("concurrency")]
+        [ResponseType(typeof(int))]
         public IHttpActionResult GetConcurrency()
         {
             return Ok(JobManager.MaxScrapers);

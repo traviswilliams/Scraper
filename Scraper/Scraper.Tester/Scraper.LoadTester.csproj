@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Scraper.Tester</RootNamespace>
-    <AssemblyName>Scraper.Tester</AssemblyName>
+    <RootNamespace>Scraper.LoadTester</RootNamespace>
+    <AssemblyName>Scraper.LoadTester</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

@@ -14,8 +14,8 @@ namespace Scraper.DataAccess
 
         T Get(Guid id);
 
-        IEnumerable<T> GetByStatus(JobStatus status);
+        IEnumerable<T> GetByStatus(JobStatus status, int numResults = 25, int pageNumber = 1);
 
-        IEnumerable<T> Where(Predicate<T> query);
+        IEnumerable<T> Where(Predicate<T> query, int numResults = 25, int pageNumber = 1);
     }
 }

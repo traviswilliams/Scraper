@@ -13,7 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper.Services", "Scraper
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{84722DC2-CE44-4071-96AD-E08096AA4C4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper.Tester", "Scraper.Tester\Scraper.Tester.csproj", "{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scraper.LoadTester", "Scraper.Tester\Scraper.LoadTester.csproj", "{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

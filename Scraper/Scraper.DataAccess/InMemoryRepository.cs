@@ -32,19 +32,33 @@ namespace Scraper.DataAccess
             return job;
         }
 
-        public IEnumerable<Job> GetByStatus(JobStatus status)
+        public IEnumerable<Job> GetByStatus(JobStatus status, int numResults = 25, int pageNumber = 1)
         {
+            if (pageNumber < 1)
+                pageNumber = 1;
+            if (numResults < 1 || numResults > 50)
+                numResults = 25;
+
             return DataStore.Instance.Store
                 .Where(i => i.Value.Status == status)
                 .Select(i => i.Value)
+                .Skip((pageNumber -1) * numResults)
+                .Take(numResults)
                 .ToList();
         }
 
-        public IEnumerable<Job> Where(Predicate<Job> query)
+        public IEnumerable<Job> Where(Predicate<Job> query, int numResults = 25, int pageNumber = 1)
         {
+            if (pageNumber < 1)
+                pageNumber = 1;
+            if (numResults < 1 || numResults > 50)
+                numResults = 25;
+
             return DataStore.Instance.Store
                 .Where(i => query(i.Value))
                 .Select(i => i.Value)
+                .Skip((pageNumber - 1) * numResults)
+                .Take(numResults)
                 .ToList();
         }
 

@@ -23,19 +23,19 @@ namespace Scraper.Services
 
         void QueueJob(Job job);
 
-        /// <summary>
-        /// Get a job.
-        /// </summary>
-        Job GetJob(Guid id);
+        ///// <summary>
+        ///// Get a job.
+        ///// </summary>
+        //Job GetJob(Guid id);
 
-        /// <summary>
-        /// Get all jobs with a particular status.
-        /// </summary>
-        IEnumerable<Job> GetJobs(JobStatus status);
+        ///// <summary>
+        ///// Get all jobs with a particular status.
+        ///// </summary>
+        //IEnumerable<Job> GetJobs(JobStatus status);
 
-        /// <summary>
-        /// Get jobs matching a predicate.
-        /// </summary>
-        IEnumerable<Job> GetJobs(Predicate<Job> query);
+        ///// <summary>
+        ///// Get jobs matching a predicate.
+        ///// </summary>
+        //IEnumerable<Job> GetJobs(Predicate<Job> query);
     }
 }
