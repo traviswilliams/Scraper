@@ -1,4 +1,6 @@
 ﻿using Scraper.Models;
+using Scraper.Services.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Scraper.Services
@@ -8,6 +10,8 @@ namespace Scraper.Services
         int MaxScrapers { get; set; }
 
         int CurrentlyRunningJobs { get; }
+
+        ManagerStatus Status { get; }
 
         void Start();
 
@@ -20,10 +24,10 @@ namespace Scraper.Services
         void QueueJob(IJob job);
 
         /// <summary>
-        /// Get all jobs.
+        /// Get a job.
         /// </summary>
         /// <returns></returns>
-        IEnumerable<IJob> GetJobs();
+        IJob GetJob(Guid id);
 
         /// <summary>
         /// Get all jobs with a particular status.

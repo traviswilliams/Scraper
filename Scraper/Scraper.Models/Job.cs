@@ -28,14 +28,5 @@ namespace Scraper.Models
         {
             return $"Job: {Id} -- [{Status}]:  {Url}";
         }
-
-        public IJob Clone()
-        {
-            return new Job
-            {
-                Url = Url,
-                Status = Status
-            };
-        }
     }
 }

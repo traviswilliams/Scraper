@@ -1,6 +1,7 @@
 ﻿using Scraper.DataAccess;
 using Scraper.Models;
 using Scraper.Services.Extensions;
+using Scraper.Services.Models;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace Scraper.Services
         private IScraperService Scraper { get; }
         private IRepository<IJob> JobRepository { get; }
 
-        private int maxScrapers = 10;
+        private int maxScrapers = 2;
 
         public int MaxScrapers
         {
@@ -28,21 +29,24 @@ namespace Scraper.Services
             }
         }
 
+        private volatile ManagerStatus _status = ManagerStatus.Stopped;
+        public ManagerStatus Status => _status;
+
         public int CurrentlyRunningJobs => throw new NotImplementedException();
 
         private ConcurrentQueue<IJob> PendingJobQueue { get; } = new ConcurrentQueue<IJob>();
         private ConcurrentDictionary<IJob, Task<ScrapeResult>> RunningJobs { get; } = new ConcurrentDictionary<IJob, Task<ScrapeResult>>();
 
-        private static object lockObject = new object();
         private Thread jobRunner;
-        private volatile bool _running = false;
-        private volatile bool _paused = false;
+        private static object lockObject = new object();
         private static EventWaitHandle waitHandle = new ManualResetEvent(true);
 
         public JobManager(IScraperService scraper, IRepository<IJob> repository)
         {
             Scraper = scraper;
             JobRepository = repository;
+
+            Start();
         }
 
         /// <summary>
@@ -50,11 +54,14 @@ namespace Scraper.Services
         /// </summary>
         public void Start()
         {
+            if (jobRunner != null)
+                return; 
+
             jobRunner = new Thread(new ThreadStart(() =>
             {
-                _running = true;
+                _status = ManagerStatus.Started;
 
-                while(_running)
+                while (Status != ManagerStatus.Stopped)
                 {
                     ProcessWaitingJobs();
 
@@ -63,13 +70,15 @@ namespace Scraper.Services
                     waitHandle.WaitOne();
                 }
             }));
+
+            jobRunner.Start();
         }
 
         public void Stop()
         {
             if (jobRunner != null)
             {
-                _running = false;
+                _status = ManagerStatus.Stopped;
                 jobRunner = null;
             }
         }
@@ -79,6 +88,8 @@ namespace Scraper.Services
             if (jobRunner == null)
                 return;
 
+            _status = ManagerStatus.Paused;
+
             waitHandle.Reset();
         }
 
@@ -87,22 +98,25 @@ namespace Scraper.Services
             if (jobRunner == null)
                 return;
 
+            _status = ManagerStatus.Started;
+
             waitHandle.Set();
         }
 
         public void QueueJob(IJob job)
         {
+            JobRepository.Save(job);
             PendingJobQueue.Enqueue(job);
         }
 
-        public IEnumerable<IJob> GetJobs()
+        public IJob GetJob(Guid id)
         {
-            throw new NotImplementedException();
+            return JobRepository.Get(id);
         }
 
         public IEnumerable<IJob> GetJobs(JobStatus status)
         {
-            throw new NotImplementedException();
+            return JobRepository.GetByStatus(status);
         }
 
         /// <summary>
@@ -154,7 +168,7 @@ namespace Scraper.Services
                 {
                     var result = RunningJobs[job].Result;
 
-                    job.Status = result.Error != null ? JobStatus.Completed : JobStatus.Failed;
+                    job.Status = result.Error != null ? JobStatus.Failed : JobStatus.Completed;
                     job.Result = result.Error != null ? result.Error.GetFullExceptionMessage() : result.Body;
 
                     JobRepository.Save(job);

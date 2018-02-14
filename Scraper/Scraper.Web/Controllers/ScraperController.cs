@@ -1,66 +1,37 @@
 ﻿using Scraper.Models;
 using Scraper.Services;
+using Scraper.Web.Models;
+using System;
 using System.Web.Http;
 
 namespace Scraper.Web.Controllers
 {
     [RoutePrefix("scraper")]
-    public class ScraperController : ApiController
+    public class ScraperController : BaseController
     {
-        private IJobManager ScraperManager { get; }
-
-        public ScraperController(IJobManager scraperManager)
-        {
-            ScraperManager = scraperManager;
-        }
-
-        /// <summary>
-        /// Start the scraping job.
-        /// </summary>
-        [HttpPost, Route("start")]
-        public void Start()
-        {
-            ScraperManager.Stop();
-        }
-
-        /// <summary>
-        /// Stop the scraper. This forces scraping to stop and will fail any currently running jobs.
-        /// </summary>
-        [HttpPost, Route("stop")]
-        public void Stop()
-        {
-            ScraperManager.Stop();
-        }
-
-        /// <summary>
-        /// Pause the scraper.
-        /// </summary>
-        [HttpPost, Route("pause")]
-        public void Pause()
-        {
-            ScraperManager.Pause();
-        }
-
-        /// <summary>
-        /// Resume the scraper.
-        /// </summary>
-        [HttpPost, Route("resume")]
-        public void Resume()
-        {
-            ScraperManager.Resume();
-        }
+        public ScraperController(IJobManager scraperManager) : base(scraperManager) {  }
 
         /// <summary>
         /// Add a scrape job
         /// </summary>
         /// <param name="url">The url of the site to scrape.</param>
-        [HttpGet, Route("scrape/{url}")]
-        public IHttpActionResult Scrape(string url)
+        [HttpPost, Route("scrape")]
+        public IHttpActionResult Scrape(ScrapeRequest request)
         {
-            var job = new Job(url);
+            var job = new Job(request.Url);
             ScraperManager.QueueJob(job);
 
             return Ok(job);
+        }
+
+        [HttpGet, Route("job/{id}")]
+        public IHttpActionResult GetJob(Guid id)
+        {
+            var job = ScraperManager.GetJob(id);
+
+            return job == null
+                ? (IHttpActionResult)NotFound()
+                : Ok(job);
         }
 
         /// <summary>
@@ -78,7 +49,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("running")]
         public IHttpActionResult GetRunningJobs()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Pending));
+            return Ok(ScraperManager.GetJobs(JobStatus.Running));
         }
 
         /// <summary>
@@ -87,7 +58,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("completed")]
         public IHttpActionResult GetCompleted()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Pending));
+            return Ok(ScraperManager.GetJobs(JobStatus.Completed));
         }
 
         /// <summary>
@@ -96,8 +67,7 @@ namespace Scraper.Web.Controllers
         [HttpGet, Route("failed")]
         public IHttpActionResult GetFailedJobs()
         {
-            return Ok(ScraperManager.GetJobs(JobStatus.Pending));
+            return Ok(ScraperManager.GetJobs(JobStatus.Failed));
         }
-
     }
 }

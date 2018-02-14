@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{48C8BB21-FF14-4317-9ACB-9E95CDAB0868}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Scraper.Services</RootNamespace>
-    <AssemblyName>Scraper.Services</AssemblyName>
+    <ProjectGuid>{7FD8C1F8-F17B-4CAC-B1D6-E839DAC78369}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>Scraper.Tester</RootNamespace>
+    <AssemblyName>Scraper.Tester</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -30,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1-beta3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,20 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\ExceptionExtension.cs" />
-    <Compile Include="IJobManager.cs" />
-    <Compile Include="Models\ManagerStatus.cs" />
-    <Compile Include="Scrapers\IScraperService.cs" />
-    <Compile Include="JobManager.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Scrapers\HttpClientScraper.cs" />
-    <Compile Include="Models\ScrapeResult.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Scraper.DataAccess\Scraper.DataAccess.csproj">
-      <Project>{f44d7dbb-9c2d-422a-a0a8-ab24b8c28c70}</Project>
-      <Name>Scraper.DataAccess</Name>
-    </ProjectReference>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Scraper.Models\Scraper.Models.csproj">
       <Project>{41a741f5-ad80-400f-9d04-847fc8718ed0}</Project>
       <Name>Scraper.Models</Name>
