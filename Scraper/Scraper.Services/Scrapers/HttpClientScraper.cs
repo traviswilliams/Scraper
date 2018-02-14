@@ -23,9 +23,12 @@ namespace Scraper.Services
                     return new ScrapeResult
                     {
                         StatusCode = result.StatusCode,
-                        Body = result.IsSuccessStatusCode
+                        Body = result.IsSuccessStatusCode 
                             ? await result.Content.ReadAsStringAsync()
                             : string.Empty,
+                        Error = result.IsSuccessStatusCode
+                            ? null
+                            : new Exception(result.ReasonPhrase)
                     };
                 }
             }
