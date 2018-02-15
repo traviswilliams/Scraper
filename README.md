@@ -30,6 +30,9 @@ This is not a full list of API calls, just the basics to get going;
     - http://localhost:65304/admin/stop
     - http://localhost:65304/admin/start
 
+## Scraper.LoadTester
+This is a simple console app which makes some Scrape requests against the API.  There's a UrlList.txt file with URLs to scrape, and it just pulls out h1,h2,h3 tags.  It doesn't have a lot of URLs but it will simplify adding some jobs to view throughout the API.
+
 ## Improvements
 1. Using an in-memory data store is not ideal since any time the app shuts down it's lost.  A database/document store would make this much better.  I've used the Repository pattern so this type of change could be (more) easily made in the future
 2. JobManager currently kicks off a long-running thread which is at the whim of IIS (i.e. it can be killed whenever which is a major problem.)  Frameworks such as [Quartz.net](https://www.quartz-scheduler.net/) and [Hangfire](https://www.hangfire.io/) could really help with this as they have persistence. 
