@@ -40,6 +40,16 @@ namespace Scraper.Tests
         }
 
         [TestMethod]
+        public void Scraper_GetResultWithNullSelectors()
+        {
+            var result = Scraper.Scrape("https://www.google.com", null);
+
+            Assert.AreEqual(HttpStatusCode.OK, result.StatusCode);
+            Assert.IsNull(result.Error);
+            Assert.IsNotNull(result.Body);
+        }
+
+        [TestMethod]
         public void Scraper_BadUrl()
         {
             var result = Scraper.Scrape("bad_url", new List<string> { });
