@@ -16,7 +16,9 @@ namespace Scraper.Tests.Mocks
 
         public async Task<ScrapeResult> ScrapeAsync(string url, IEnumerable<string> selectors)
         {
-            var selectorList = selectors.Any() ? selectors.ToList() : new List<string> { "html" };
+            var selectorList = selectors != null && selectors.Any() 
+                ? selectors.ToList() 
+                : new List<string> { "html" };
 
             return await Task.Run(() => new ScrapeResult
             {

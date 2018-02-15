@@ -38,7 +38,9 @@ namespace Scraper.Services
             if (scrapeResult.Error != null)
                 return scrapeResult;
 
-            var selectorList = selectors.Any() ? selectors.ToList() : new List<string> { "html" };
+            var selectorList = selectors != null && selectors.Any() 
+                ? selectors.ToList() 
+                : new List<string> { "html" };
 
             var results = new ConcurrentDictionary<string, IEnumerable<string>>();
 
