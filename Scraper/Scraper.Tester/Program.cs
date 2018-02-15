@@ -27,8 +27,12 @@ namespace Scraper.Tester
                 {
                     var content = new FormUrlEncodedContent(new[]
                     {
-                        new KeyValuePair<string, string>("url", url)
+                        new KeyValuePair<string, string>("url", url),
+                        new KeyValuePair<string, string>("selectors[]", "h1"),
+                        new KeyValuePair<string, string>("selectors[]", "h2"),
+                        new KeyValuePair<string, string>("selectors[]", "h3")
                     });
+
                     var response = client.PostAsync(scrapeUrl, content).GetAwaiter().GetResult();
 
                     if (response.IsSuccessStatusCode)

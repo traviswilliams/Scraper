@@ -1,6 +1,7 @@
 ﻿using AngleSharp;
 using AngleSharp.Dom.Html;
 using AngleSharp.Parser.Html;
+using Scraper.Services.Extensions;
 using Scraper.Services.Models;
 using System;
 using System.Collections.Concurrent;
@@ -48,15 +49,15 @@ namespace Scraper.Services
             {
                 Parallel.ForEach(selectorList, (selector) =>
                 {
-                    var result = ParseSelector(parsedHtml, selector);
-
-                    if (results.ContainsKey(selector))
+                    try
                     {
-                        results[selector].Union(result);
+                        var result = ParseSelector(parsedHtml, selector);
+                        results.AddOrUpdate(selector, result, (k, v) => v.Union(result));
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        results.TryAdd(selector, result);
+                        var result = new List<string> { ex.GetFullExceptionMessage() };
+                        results.AddOrUpdate(selector, result, (k,v) => v.Union(result));
                     }
                 });
             }
