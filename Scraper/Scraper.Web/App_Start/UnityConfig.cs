@@ -45,7 +45,7 @@ namespace Scraper.Web
             container.RegisterType<IJobManager, JobManager>(new ContainerControlledLifetimeManager());
 
             //New instance per
-            container.RegisterType<IScraperService, HttpClientScraper>(new TransientLifetimeManager());
+            container.RegisterType<IScraperService, SimpleScraperService>(new TransientLifetimeManager());
         }
     }
 }

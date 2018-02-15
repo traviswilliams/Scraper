@@ -4,6 +4,7 @@ using Scraper.Services.Extensions;
 using Scraper.Services.Models;
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace Scraper.Services
         public void Start()
         {
             if (jobRunner != null)
-                return; 
+                return;
 
             jobRunner = new Thread(new ThreadStart(() =>
             {
@@ -137,7 +138,7 @@ namespace Scraper.Services
                         pendingJob.Status = JobStatus.Running;
 
                         JobRepository.Save(pendingJob);
-                        RunningJobs.TryAdd(pendingJob, Scraper.ScrapeAsync(pendingJob.Url));
+                        RunningJobs.TryAdd(pendingJob, Scraper.ScrapeAsync(pendingJob.Url, pendingJob.Selectors));
                     }
                 }
             }
@@ -157,7 +158,6 @@ namespace Scraper.Services
         /// <summary>
         /// Remove jobs when they succeed/fail
         /// </summary>
-        /// <param name="job"></param>
         private void ProcessRunningJob(Job job)
         {
             if (!RunningJobs.TryGetValue(job, out var scrapeResult))
@@ -169,8 +169,19 @@ namespace Scraper.Services
                 {
                     var result = RunningJobs[job].Result;
 
-                    job.Status = result.Error != null ? JobStatus.Failed : JobStatus.Completed;
-                    job.Result = result.Error != null ? result.Error.GetFullExceptionMessage() : result.Body;
+                    if (result.Error != null)
+                    {
+                        job.Status = JobStatus.Failed;
+                        job.Result = new Dictionary<string, IEnumerable<string>>
+                        {
+                            { "Error", new List<string> { scrapeResult.Exception.GetFullExceptionMessage() } }
+                        };
+                    }
+                    else
+                    {
+                        job.Status = JobStatus.Completed;
+                        job.Result = result.Scrape;
+                    }
 
                     JobRepository.Save(job);
                     RunningJobs.TryRemove(job, out var removedJob);
@@ -178,7 +189,10 @@ namespace Scraper.Services
                 else if (scrapeResult.IsFaulted)
                 {
                     job.Status = JobStatus.Failed;
-                    job.Result = scrapeResult.Exception.GetFullExceptionMessage();
+                    job.Result = new Dictionary<string, IEnumerable<string>>
+                    {
+                        { "Error", new List<string> { scrapeResult.Exception.GetFullExceptionMessage() } }
+                    };
 
                     JobRepository.Save(job);
                     RunningJobs.TryRemove(job, out var removedJob);

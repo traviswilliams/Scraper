@@ -36,6 +36,8 @@ namespace Scraper.Web.Controllers
                 .FirstOrDefault();
 
             var job = existingJob ?? new Job(request.Url);
+            job.Selectors = request.Selectors;
+
             JobManager.QueueJob(job);
 
             return Ok(job);

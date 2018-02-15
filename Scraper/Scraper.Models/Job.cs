@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Scraper.Models
 {
@@ -8,7 +9,9 @@ namespace Scraper.Models
 
         public string Url { get; set; }
 
-        public string Result { get; set; }
+        public IEnumerable<string> Selectors { get; set; } = new List<string>();
+
+        public IDictionary<string, IEnumerable<string>> Result { get; set; } = new Dictionary<string, IEnumerable<string>>();
 
         public JobStatus Status { get; set; } = JobStatus.Pending;
 

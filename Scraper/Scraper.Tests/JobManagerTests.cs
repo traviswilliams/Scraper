@@ -59,8 +59,8 @@ namespace Scraper.Tests
 
             JobManager.Resume();
 
-            //Wait a second.
-            Task.Delay(TimeSpan.FromSeconds(.5)).Wait();
+            //Wait for it all to be processed.
+            Task.Delay(TimeSpan.FromSeconds(1)).Wait();
 
             Assert.AreEqual(currentComplete + 1, JobRepository.GetByStatus(JobStatus.Completed).Count());
         }
